@@ -15,7 +15,7 @@ Bot do Simas <?= $name?> </br>
 
 <?php
 
-function sendMessage($chatId, $text) {
+function sendMessage($chatId, $text) {                                               //sendMessage?chat_id="  === PARA PASSAR MENSAGENS DE VOLTA AO TELEGRAM
             file_get_contents("https://api.telegram.org/bot225906168:AAFObjFWTfrwSp9tDaMRYHyPpxzP-qNTJTI/sendMessage?chat_id=". $chatId . "&text=" . $text);
 }
 
@@ -34,29 +34,40 @@ for ($i=0; $i<$var; $i++){
 	$nome = $text['result'][$i]['message']['chat']['first_name'];
 	$id = $text['result'][$i]['message']['chat']['id'];
 	$msg = $text['result'][$i]['message']['text'];
+	$updateid = $text['result'][$i]['update_id'];
 	//print_r($msg);
 	
 	$ids[$j] = $id;
 	$j++;
 	
-	if ($msg == '/megasena'){
-		for ($c = 1; $c < 6; $c++){
-			$numeroMega[$c] = rand(1,60);
-		}
-		sort($numeroMega);
-		$sena = implode('-', $numeroMega); print "<br>";
-		$updateid = $text['result'] [$i] ['update_id'];  
-		$file='updateid.txt';  //print_r($file);
-		file_put_contents($file, $updateId.',', FILE_APPEND);
 	
-		sendMessage($ids[$i],$sena);
+	$file='updateid.txt';  //print_r($file);
+	$str = file_get_contents($file);
+	 $arrayupdateid = explode(',',$str);
 		
-	
+		
+	if (!in_array($updateid, $arrayupdateid)){
+		
+		if ($msg == '/megasena'){
+			for ($c = 0; $c < 6; $c++){
+				$numeroMega[$c] = str_pad(rand(1, 60), 2, '0', STR_PAD_LEFT);
+			}
+			sort($numeroMega);
+			$sena = implode('-', $numeroMega); print "<br>";
+      
+			sendMessage($ids[$i],$sena);
+			file_put_contents($file, $updateid.',', FILE_APPEND);
+		}
 	}
 
 }
-	 //$str = file_get_contents($file);
-	  // print_r($str);
+	 
+	
+	  
+	  
+	 //print_r($str);
+	  //var_dump($str);
+	  
 $ids = array_unique($ids);
 $ids = array_values($ids);
 $contagem = count($ids);
