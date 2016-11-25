@@ -33,11 +33,9 @@ script:
   - phpmd . text unusedcode --exclude vendor
   ## PHPLOC
   - php phploc.phar . --exclude vendor
-  ## PHPUNIT
-  - phpunit .
   ## LINT
   - find ./ -type f -name \*.php -exec php -l {} \;
 
 notifications:
   email:
-    cameralife@phor.net
+    lucas-simas@hotmail.com
