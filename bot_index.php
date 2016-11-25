@@ -1,5 +1,3 @@
-<html>
-<body>
 <?php
 
 $name = "";
@@ -85,5 +83,3 @@ $conn=null;
 //echo print_r($text,true);//imprime o texto na tela
 
 ?>
-</body>
-</html>
