@@ -8,7 +8,6 @@ if(isset($_GET["name"])) {
 
 ?>
 
-
 Bot do Simas <?= $name?> </br>
 
 <?php
