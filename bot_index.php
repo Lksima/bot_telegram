@@ -28,22 +28,30 @@ $ids = array();
 
 $var = count($text['result']);
 $j = 0;
-//laço para buscar mensagem no json 
+//laÃ§o para buscar mensagem no json 
+$conexao = new PDO("mysql:host=127.0.0.1:3306;dbname=Bot_Telegram", "root", "");
+$sql = "insert into resultado(updateid,nome_comando,text_resposta,chatid) values(?,?,?,?)";
+
+//echo inverse(0) . "\n";
 for ($i=0; $i<$var; $i++){	
+	
+	if(!isset($text['result'][$i]['message']['text'])) {
+		continue;
+	}
 	
 	$nome = $text['result'][$i]['message']['chat']['first_name'];
 	$id = $text['result'][$i]['message']['chat']['id'];
 	$msg = $text['result'][$i]['message']['text'];
+	$msg = strtolower($msg);
+
 	$updateid = $text['result'][$i]['update_id'];
 	//print_r($msg);
 	
-	$ids[$j] = $id;
-	$j++;
-	
+
 	
 	$file='updateid.txt';  //print_r($file);
 	$str = file_get_contents($file);
-	 $arrayupdateid = explode(',',$str);
+	$arrayupdateid = explode(',',$str);
 		
 		
 	if (!in_array($updateid, $arrayupdateid)){
@@ -54,42 +62,27 @@ for ($i=0; $i<$var; $i++){
 			}
 			sort($numeroMega);
 			$sena = implode('-', $numeroMega); print "<br>";
-      
-			sendMessage($ids[$i],$sena);
+	  
+			sendMessage($id,$sena);
 			file_put_contents($file, $updateid.',', FILE_APPEND);
-		}
+			
+			$stmt = $conexao->prepare($sql);
+			$stmt->bindParam(1,$updateid);
+			$stmt->bindParam(2,$msg);
+			$stmt->bindParam(3,$sena);
+			$stmt->bindParam(4,$id);
+			$stmt->execute();			
+			
+		} 
 	}
-
 }
-	 
-	
-	  
-	  
-	 //print_r($str);
-	  //var_dump($str);
-	  
-$ids = array_unique($ids);
-$ids = array_values($ids);
-$contagem = count($ids);
 
-
-//
-
-
-
-
-//print_r($ids);
+$conn=null;	
 
  //for ($i = 0; $i < $contagem; $i++) {
 	//sendMessage($ids[$i],"0x2");
  //}
-
-
-
-
 //echo print_r($text,true);//imprime o texto na tela
-
-
 
 ?>
 </body>
